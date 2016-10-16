@@ -1,6 +1,6 @@
-package com.demiashkevich.generate;
+package com.demiashkevich.thread.generate;
 
-public class GenerateId {
+public class IncrementId {
 
     private static int shipId = 0;
 

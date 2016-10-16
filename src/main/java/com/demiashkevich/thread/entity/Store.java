@@ -1,34 +1,43 @@
-package com.demiashkevich.entity;
+package com.demiashkevich.thread.entity;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.demiashkevich.thread.generate.RandomGenerate.generateCapacityStore;
+
 public class Store {
 
-    private final static int COUNT_SHIP = 5;
+    public static final int COUNT_SHIP = 5;
+    public static final int MAX_CAPACITY = 100;
+
     private Semaphore semaphore = new Semaphore(COUNT_SHIP, true);
-    private final boolean[] PIER = new boolean[COUNT_SHIP];
-    private final int MAX_CAPACITY;
+    private final boolean[] pier = new boolean[COUNT_SHIP];
+    private static AtomicBoolean instance = new AtomicBoolean(false);
+
     private int capacity;
     private static Lock lock = new ReentrantLock();
     private static Condition condition = lock.newCondition();
     private static Store store;
 
     private Store() {
-        MAX_CAPACITY = 100;
-        capacity = 20;
+        capacity = generateCapacityStore();
+        System.out.println("Store capacity " + capacity);
     }
 
     public static Store getStore(){
-        if(store == null) {
-            lock.lock();
+        if(!instance.get()) {
+            try {
+                lock.lock();
                 if (store == null) {
+                    instance.getAndSet(true);
                     store = new Store();
-                    lock.unlock();
-                    return store;
                 }
+            }finally {
+                lock.unlock();
+            }
         }
         return store;
     }
@@ -36,14 +45,14 @@ public class Store {
     public void addContainer(int count, long numberShip) {
         try {
             lock.lock();
-            if (capacity + count < MAX_CAPACITY) {
-                capacity += count;
-                System.out.println(numberShip + " ship " + count + " container was add in store.");
-                condition.signalAll();
-            } else {
+            while (capacity + count > MAX_CAPACITY)
+            {
                 condition.await();
-                this.addContainer(count, numberShip);
             }
+            capacity += count;
+            System.out.println(numberShip + " ship " + count + " container was add in store.");
+            condition.signalAll();
+
         } catch (InterruptedException exception){
             exception.printStackTrace();
         }
@@ -55,24 +64,19 @@ public class Store {
     public void buyContainer(int count, long numberShip){
         try {
             lock.lock();
-            if (capacity - count > 0) {
-                capacity -= count;
-                System.out.println(numberShip + " ship " + count + " container was buy on store.");
-                condition.signalAll();
-            } else {
+            while(capacity - count < 0){
                 condition.await();
-                this.buyContainer(count, numberShip);
             }
+            capacity -= count;
+            System.out.println(numberShip + " ship " + count + " container was buy on store.");
+            condition.signalAll();
+
         } catch (InterruptedException exception){
             exception.printStackTrace();
         }
         finally {
             lock.unlock();
         }
-    }
-
-    public int getMAX_CAPACITY() {
-        return MAX_CAPACITY;
     }
 
     public int getCapacity() {
@@ -87,7 +91,7 @@ public class Store {
         return semaphore;
     }
 
-    public boolean[] getPIER() {
-        return PIER;
+    public boolean[] getPier() {
+        return pier;
     }
 }
