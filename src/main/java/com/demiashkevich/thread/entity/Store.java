@@ -1,8 +1,9 @@
 package com.demiashkevich.thread.entity;
 
+import com.demiashkevich.thread.action.StoreAction;
+
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -19,8 +20,8 @@ public class Store {
 
     private int capacity;
     private static Lock lock = new ReentrantLock();
-    private static Condition condition = lock.newCondition();
     private static Store store;
+    private static final StoreAction action =  new StoreAction();
 
     private Store() {
         capacity = generateCapacityStore();
@@ -42,43 +43,6 @@ public class Store {
         return store;
     }
 
-    public void addContainer(int count, long numberShip) {
-        try {
-            lock.lock();
-            while (capacity + count > MAX_CAPACITY)
-            {
-                condition.await();
-            }
-            capacity += count;
-            System.out.println(numberShip + " ship " + count + " container was add in store.");
-            condition.signalAll();
-
-        } catch (InterruptedException exception){
-            exception.printStackTrace();
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
-    public void buyContainer(int count, long numberShip){
-        try {
-            lock.lock();
-            while(capacity - count < 0){
-                condition.await();
-            }
-            capacity -= count;
-            System.out.println(numberShip + " ship " + count + " container was buy on store.");
-            condition.signalAll();
-
-        } catch (InterruptedException exception){
-            exception.printStackTrace();
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
     public int getCapacity() {
         return capacity;
     }
@@ -93,5 +57,9 @@ public class Store {
 
     public boolean[] getPier() {
         return pier;
+    }
+
+    public static StoreAction getAction() {
+        return action;
     }
 }

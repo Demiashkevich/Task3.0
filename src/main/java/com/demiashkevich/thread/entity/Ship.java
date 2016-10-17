@@ -35,8 +35,8 @@ public class Ship extends Thread {
                     break;
                 }
             }
-            state.work(shipId, store, capacityLoad, capacityUnload);
             TimeUnit.SECONDS.sleep(2);
+            state.work(shipId, store, capacityLoad, capacityUnload);
             this.getStore().getPier()[numberPier] = false;
 
         } catch (InterruptedException exception) {
