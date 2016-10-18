@@ -1,6 +1,6 @@
 package com.demiashkevich.thread.entity;
 
-import com.demiashkevich.thread.state.IStateShip;
+import com.demiashkevich.thread.state.ship.IStateShip;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,7 +35,7 @@ public class Ship extends Thread {
                     break;
                 }
             }
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(10);
             state.work(shipId, store, capacityLoad, capacityUnload);
             this.getStore().getPier()[numberPier] = false;
 

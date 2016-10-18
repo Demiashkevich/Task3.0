@@ -1,9 +1,9 @@
 package com.demiashkevich.thread.generate;
 
-import com.demiashkevich.thread.state.IStateShip;
-import com.demiashkevich.thread.state.LoadStateShip;
-import com.demiashkevich.thread.state.LoadUnloadStateShip;
-import com.demiashkevich.thread.state.UnloadStateShip;
+import com.demiashkevich.thread.state.ship.IStateShip;
+import com.demiashkevich.thread.state.ship.LoadStateShip;
+import com.demiashkevich.thread.state.ship.LoadUnloadStateShip;
+import com.demiashkevich.thread.state.ship.UnloadStateShip;
 
 import java.util.Random;
 

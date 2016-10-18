@@ -12,7 +12,7 @@ import static com.demiashkevich.thread.generate.RandomGenerate.generateState;
 
 public class GenerateShips {
 
-    private static final int SHIP_COUNT = 3;
+    private static final int SHIP_COUNT = 10;
 
     public void generateShips(Store store){
         for(int current = 0; current < SHIP_COUNT; current++){

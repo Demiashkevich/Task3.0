@@ -1,13 +1,13 @@
-package com.demiashkevich.thread.state;
+package com.demiashkevich.thread.state.ship;
 
 import com.demiashkevich.thread.action.StoreAction;
 import com.demiashkevich.thread.entity.Store;
 
-public class UnloadStateShip implements IStateShip {
+public class LoadStateShip implements IStateShip{
 
     @Override
     public void work(long shipId, Store store, int countLoad, int countUnload) {
         StoreAction action = Store.getAction();
-        action.unloadContainer(store, countUnload, shipId);
+        action.loadContainer(store, countLoad, shipId);
     }
 }

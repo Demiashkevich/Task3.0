@@ -1,4 +1,4 @@
-package com.demiashkevich.thread.state;
+package com.demiashkevich.thread.state.ship;
 
 import com.demiashkevich.thread.entity.Store;
 
