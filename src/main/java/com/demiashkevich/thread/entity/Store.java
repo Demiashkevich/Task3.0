@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.demiashkevich.thread.generate.RandomGenerate.generateCapacityStore;
+
 public class Store {
 
     public static final int COUNT_SHIP = 5;
@@ -22,7 +24,7 @@ public class Store {
     private static final StoreAction action =  new StoreAction();
 
     private Store() {
-        capacity = 0;
+        capacity = generateCapacityStore();
         System.out.println("Store capacity " + capacity);
     }
 
