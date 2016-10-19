@@ -5,7 +5,7 @@ import com.demiashkevich.thread.generate.GenerateShips;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args){
         Store store = Store.getStore();
         GenerateShips ships = new GenerateShips();
         ships.generateShips(store);
